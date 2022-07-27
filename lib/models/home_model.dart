@@ -45,7 +45,7 @@ class ProductsModel
 {
   late int id;
   late dynamic price;
-  late dynamic oldPrice;
+  dynamic oldPrice;
   late dynamic discount;
   late String image;
   late String name;

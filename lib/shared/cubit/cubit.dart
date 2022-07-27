@@ -41,7 +41,7 @@ class AppCubit extends Cubit<AppStates>
       token: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
-      printFullText(homeModel!.data!.banners[0].image);
+      // printFullText(homeModel!.data!.banners[0].image);
       print(homeModel?.status);
       emit(AppSuccessHomeDataState());
     }).catchError((error){

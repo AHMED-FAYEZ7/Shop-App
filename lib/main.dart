@@ -4,6 +4,8 @@ import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login/login_screen.dart';
 import 'package:shop_app/modules/on_boarding/on_boarding_screen.dart';
 import 'package:shop_app/shared/bloc_observer.dart';
+import 'package:shop_app/shared/cubit/cubit.dart';
+import 'package:shop_app/shared/cubit/states.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
 import 'package:shop_app/shared/styles/theme.dart';
@@ -46,11 +48,20 @@ class MyApp extends StatelessWidget
   @override
   Widget build(BuildContext context)
   {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      themeMode: ThemeMode.light,
-      home: startWidget,
+    return BlocProvider(
+      create: (BuildContext context) => AppCubit()..getHomeData(),
+      child: BlocConsumer<AppCubit,AppStates>(
+        listener: (context,state){},
+        builder: (context,state)
+        {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            themeMode: ThemeMode.light,
+            home: startWidget,
+          );
+        },
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/models/Gategories_model.dart';
 import 'package:shop_app/models/home_model.dart';
 import 'package:shop_app/shared/cubit/cubit.dart';
 import 'package:shop_app/shared/cubit/states.dart';
@@ -18,17 +19,18 @@ class HomeScreen extends StatelessWidget {
         builder: (context, state)
         {
           return ConditionalBuilder(
-              condition: AppCubit.get(context).homeModel != null,
-              builder: (context) => homeBuilder(AppCubit.get(context).homeModel!),
+              condition: AppCubit.get(context).homeModel != null && AppCubit.get(context).categoriesModel != null,
+              builder: (context) => homeBuilder(AppCubit.get(context).homeModel!, AppCubit.get(context).categoriesModel!),
               fallback: (context) => const Center(child: CircularProgressIndicator()),
           );
         },
     );
   }
 
-  Widget homeBuilder(HomeModel model) => SingleChildScrollView(
+  Widget homeBuilder(HomeModel model,CategoriesModel categoriesModel) => SingleChildScrollView(
     physics: const BouncingScrollPhysics(),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CarouselSlider(
           items: model.data!.banners.map((e) => Image(
@@ -47,10 +49,45 @@ class HomeScreen extends StatelessWidget {
             autoPlayInterval: const Duration(seconds: 3),
             autoPlayCurve: Curves.fastOutSlowIn,
             scrollDirection: Axis.horizontal,
-            viewportFraction: .9,
+            viewportFraction: 1,
           ),
         ),
         const SizedBox(height: 10,),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10,),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Categories',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 10,),
+              Container(
+                height: 100,
+                child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context , index) => buildCategoryItem(categoriesModel.data!.data[index]),
+                  separatorBuilder: (context , index) => const SizedBox(width: 15,),
+                  itemCount: categoriesModel.data!.data.length,
+                ),
+              ),
+              const SizedBox(height: 10,),
+              const Text(
+                'New Products',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 15,),
         Container(
           color: Colors.grey[300],
           child: GridView.count(
@@ -145,5 +182,30 @@ class HomeScreen extends StatelessWidget {
         ),
       ],
     ),
+  );
+
+  Widget buildCategoryItem(DataModel model) => Stack(
+    alignment: AlignmentDirectional.bottomCenter,
+    children: [
+      Image(
+        image:NetworkImage(model.image),
+        height: 100,
+        width: 100,
+        fit: BoxFit.cover,
+      ),
+      Container(
+        width: 100,
+        color: Colors.black.withOpacity(.8,),
+        child: Text(
+          model.name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    ],
   );
 }

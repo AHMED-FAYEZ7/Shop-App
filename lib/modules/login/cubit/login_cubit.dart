@@ -11,7 +11,7 @@ class LoginCubit extends Cubit<LoginStates>
   LoginCubit() :super(LoginInitialState());
   static LoginCubit get(context) => BlocProvider.of(context);
 
-  late LoginModel loginModel;
+  LoginModel? loginModel;
 
   void userLogin({
   required String email,
@@ -28,9 +28,9 @@ class LoginCubit extends Cubit<LoginStates>
           'password':password,
         },
     ).then((value) {
-      print(value.data);
+      // print(value.data);
       loginModel = LoginModel.fromJson(value.data);
-      emit(LoginSuccessState(loginModel));
+      emit(LoginSuccessState(loginModel!));
     }).catchError((error)
     {
       print(error.toString());

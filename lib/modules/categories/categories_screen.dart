@@ -37,13 +37,13 @@ class CategoriesScreen extends StatelessWidget {
     child: Row(
       children: [
         Image(
-          image: NetworkImage(model.image),
+          image: NetworkImage(model.image!),
           height: 100,
           width: 100,
         ),
         const SizedBox(width: 20,),
         Text(
-          model.name,
+          model.name!,
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

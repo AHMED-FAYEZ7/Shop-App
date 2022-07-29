@@ -20,6 +20,7 @@ void main()
     Widget? widget;
     bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
     String? token = CacheHelper.getData(key: 'token');
+    print(token);
     if(onBoarding != null)
     {
       if(token != null)
@@ -49,7 +50,12 @@ class MyApp extends StatelessWidget
   Widget build(BuildContext context)
   {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getHomeData()..getCategories(),
+      create: (BuildContext context) =>
+      AppCubit()
+        ..getHomeData()
+        ..getCategories()
+        ..getFavorites()
+      ,
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context,state){},
         builder: (context,state)

@@ -1,8 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login/cubit/login_cubit.dart';
 import 'package:shop_app/modules/login/cubit/login_states.dart';
@@ -25,7 +23,7 @@ class LoginScreen extends StatelessWidget {
         {
           if(state is LoginSuccessState)
           {
-            if(state.loginModel.status)
+            if(state.loginModel.status!)
             {
               // print(state.loginModel.message);
               print(state.loginModel.data?.token);
@@ -45,7 +43,7 @@ class LoginScreen extends StatelessWidget {
             {
               print(state.loginModel.message);
               showToast(
-                text: state.loginModel.message,
+                text: state.loginModel.message!,
                 state: ToastStates.ERROR,
               );
 

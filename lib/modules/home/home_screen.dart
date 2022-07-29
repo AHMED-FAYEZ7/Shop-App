@@ -5,36 +5,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/Gategories_model.dart';
 import 'package:shop_app/models/home_model.dart';
+import 'package:shop_app/shared/componants/componants.dart';
 import 'package:shop_app/shared/cubit/cubit.dart';
 import 'package:shop_app/shared/cubit/states.dart';
 import 'package:shop_app/shared/styles/colors.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit,AppStates>(
-        listener: (context, state) {},
+        listener: (context, state)
+        {
+          if(state is AppSuccessChangeFavState)
+          {
+            if(!state.model.status!)
+            {
+              showToast(
+                text: state.model.message!,
+                state: ToastStates.ERROR,
+              );
+            }
+          }
+        },
         builder: (context, state)
         {
           return ConditionalBuilder(
               condition: AppCubit.get(context).homeModel != null && AppCubit.get(context).categoriesModel != null,
-              builder: (context) => homeBuilder(AppCubit.get(context).homeModel!, AppCubit.get(context).categoriesModel!),
+              builder: (context) => homeBuilder(AppCubit.get(context).homeModel!, AppCubit.get(context).categoriesModel!,context),
               fallback: (context) => const Center(child: CircularProgressIndicator()),
           );
         },
     );
   }
-
-  Widget homeBuilder(HomeModel model,CategoriesModel categoriesModel) => SingleChildScrollView(
+  Widget homeBuilder(HomeModel model,CategoriesModel categoriesModel,context) => SingleChildScrollView(
     physics: const BouncingScrollPhysics(),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CarouselSlider(
           items: model.data!.banners.map((e) => Image(
-            image: NetworkImage(e.image),
+            image: NetworkImage(e.image!),
             width: double.infinity,
             fit: BoxFit.cover,
           )
@@ -99,7 +110,7 @@ class HomeScreen extends StatelessWidget {
             childAspectRatio: 1/1.49,
             children: List.generate(
               model.data!.products.length,
-                  (index) => buildGridItem(model.data!.products[index]),
+                  (index) => buildGridItem(model.data!.products[index],context),
             ),
           ),
         ),
@@ -107,7 +118,7 @@ class HomeScreen extends StatelessWidget {
     ),
   );
 
-  Widget buildGridItem(ProductsModel model) => Container(
+  Widget buildGridItem(ProductsModel model,context) => Container(
     color: Colors.white,
     child: Column(
       children: [
@@ -167,12 +178,22 @@ class HomeScreen extends StatelessWidget {
                         decoration: TextDecoration.lineThrough,
                       ),
                     ),
-                  Spacer(),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: (){},
-                    icon: Icon(
-                      Icons.favorite_border_outlined,
+                  const Spacer(),
+                  CircleAvatar(
+                    backgroundColor: AppCubit.get(context).favorites[model.id]! ? defaultColor: Colors.grey,
+                    radius: 14,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: ()
+                      {
+                        AppCubit.get(context).changeFavorites(model.id);
+                        print(model.id);
+                      },
+                      icon: Icon(
+                        Icons.favorite_border_outlined,
+                        size: 16,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
@@ -188,7 +209,7 @@ class HomeScreen extends StatelessWidget {
     alignment: AlignmentDirectional.bottomCenter,
     children: [
       Image(
-        image:NetworkImage(model.image),
+        image:NetworkImage(model.image!),
         height: 100,
         width: 100,
         fit: BoxFit.cover,
@@ -197,7 +218,7 @@ class HomeScreen extends StatelessWidget {
         width: 100,
         color: Colors.black.withOpacity(.8,),
         child: Text(
-          model.name,
+          model.name!,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,

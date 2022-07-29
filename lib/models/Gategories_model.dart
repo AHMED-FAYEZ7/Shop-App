@@ -14,16 +14,6 @@ class CategoriesModel
 class CategoriesDataModel
 {
   late int currentPage;
-  // late String firstPageUrl;
-  // int? from;
-  // int? lastPage;
-  // String? lastPageUrl;
-  // String? nextPageUrl;
-  // String? path;
-  // int? perPage;
-  // String? perPageURL;
-  // int? to;
-  // int? total;
   List<DataModel> data = [];
 
   CategoriesDataModel.fromJson(Map<String, dynamic> json)
@@ -38,9 +28,9 @@ class CategoriesDataModel
 
 class DataModel
 {
-  late int id;
-  late String name;
-  late String image;
+  int? id;
+  String? name;
+  String? image;
 
   DataModel.fromJson(Map<String ,dynamic> json)
   {

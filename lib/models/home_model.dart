@@ -31,8 +31,8 @@ class HomeDataModel
 
 class BannersModel
 {
-  late int id;
-  late String image;
+  int? id;
+  String? image;
 
   BannersModel.fromJson(Map<String, dynamic> json)
   {
@@ -44,9 +44,9 @@ class BannersModel
 class ProductsModel
 {
   late int id;
-  late dynamic price;
+  dynamic price;
   dynamic oldPrice;
-  late dynamic discount;
+  dynamic discount;
   late String image;
   late String name;
   late bool inFavorite;

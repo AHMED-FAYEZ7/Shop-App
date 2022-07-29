@@ -17,7 +17,7 @@ class AppSearchCubit extends Cubit<AppSearchState>
     emit(AppSearchLoadingState());
     DioHelper.postData(
         url: SEARCH,
-        token: token,
+        // token: token,
         data: {
           'text':text,
         },

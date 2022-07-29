@@ -138,7 +138,7 @@ Color choseToastColor(ToastStates state)
   return color;
 }
 
-Widget buildListItems(model,context , {bool? isOldPrice = true,}) => Padding(
+Widget buildListItems(model,context , {bool isOldPrice = true,}) => Padding(
   padding: const EdgeInsets.all(20.0),
   child: Container(
     height: 120,
@@ -153,7 +153,7 @@ Widget buildListItems(model,context , {bool? isOldPrice = true,}) => Padding(
               width:120,
               fit: BoxFit.contain,
             ),
-            if(model.discount! != 0 && isOldPrice!)
+            if(model.discount != 0 && isOldPrice)
               Container(
                 color: Colors.red,
                 padding: const EdgeInsets.symmetric(horizontal: .9,),
@@ -192,7 +192,7 @@ Widget buildListItems(model,context , {bool? isOldPrice = true,}) => Padding(
                     ),
                   ),
                   const SizedBox(width: 10,),
-                  if(model.discount! != 0 && isOldPrice!)
+                  if(model.discount != 0 && isOldPrice)
                     Text(
                       model.oldPrice!.toString(),
                       maxLines: 2,

@@ -59,7 +59,6 @@ class SearchScreen extends StatelessWidget {
                         onSubmit: (String? text)
                         {
                           AppSearchCubit.get(context).search(text!);
-                          return null;
                         }
                     ),
                     const SizedBox(height: 10,),
@@ -72,7 +71,11 @@ class SearchScreen extends StatelessWidget {
                         scrollDirection: Axis.vertical,
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) => buildListItems(
-                            AppSearchCubit.get(context).model!.data!.data?[index],
+                            AppSearchCubit
+                                .get(context)
+                                .model!
+                                .data!
+                                .data?[index],
                             context,
                             isOldPrice: false,
                         ),

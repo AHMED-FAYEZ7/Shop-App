@@ -6,6 +6,7 @@ import 'package:shop_app/modules/login/cubit/login_cubit.dart';
 import 'package:shop_app/modules/login/cubit/login_states.dart';
 import 'package:shop_app/modules/register/register_screen.dart';
 import 'package:shop_app/shared/componants/componants.dart';
+import 'package:shop_app/shared/componants/constants.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -25,28 +26,19 @@ class LoginScreen extends StatelessWidget {
           {
             if(state.loginModel.status!)
             {
-              // print(state.loginModel.message);
-              print(state.loginModel.data?.token);
-
               CacheHelper.saveData(
                   key: 'token',
-                  value: state.loginModel.data?.token,
+                  value: state.loginModel.data!.token,
               ).then((value) {
+                token = state.loginModel.data!.token;
                 navigateAndFinish(context, const ShopLayout());
               });
-
-              // showToast(
-              //   text: state.loginModel.message,
-              //   state: ToastStates.SUCCESS,
-              // );
             }else
             {
-              print(state.loginModel.message);
               showToast(
                 text: state.loginModel.message!,
                 state: ToastStates.ERROR,
               );
-
             }
           }
         },
@@ -148,7 +140,7 @@ class LoginScreen extends StatelessWidget {
                             defaultTextButton(
                               function: ()
                               {
-                                navigateTo(context, const RegisterScreen());
+                                navigateTo(context,  RegisterScreen());
                               },
                               text: 'register now',
                             ),

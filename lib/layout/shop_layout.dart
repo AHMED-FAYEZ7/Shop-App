@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shop_app/modules/login/login_screen.dart';
 import 'package:shop_app/modules/search/search_screen.dart';
 import 'package:shop_app/shared/componants/componants.dart';
-import 'package:shop_app/shared/componants/constants.dart';
 import 'package:shop_app/shared/cubit/cubit.dart';
 import 'package:shop_app/shared/cubit/states.dart';
-import 'package:shop_app/shared/network/local/cache_helper.dart';
 
 class ShopLayout extends StatelessWidget {
   const ShopLayout({Key? key}) : super(key: key);
@@ -21,7 +18,7 @@ class ShopLayout extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(
+            title: const Text(
                 'Shop App'
             ),
             actions: [
@@ -30,17 +27,8 @@ class ShopLayout extends StatelessWidget {
                 {
                   navigateTo(context, const SearchScreen());
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.search,
-                ),
-              ),
-              IconButton(
-                onPressed: ()
-                {
-                  signOut(context);
-                },
-                icon: Icon(
-                  Icons.exit_to_app_outlined,
                 ),
               ),
             ],

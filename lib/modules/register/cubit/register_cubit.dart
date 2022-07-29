@@ -1,40 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/login_model.dart';
-import 'package:shop_app/modules/login/cubit/login_states.dart';
+import 'package:shop_app/modules/register/cubit/register_states.dart';
 import 'package:shop_app/shared/network/end_points.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
 
-class LoginCubit extends Cubit<LoginStates>
+class RegisterCubit extends Cubit<RegisterStates>
 {
 
-  LoginCubit() :super(LoginInitialState());
-  static LoginCubit get(context) => BlocProvider.of(context);
+  RegisterCubit() :super(RegisterInitialState());
+  static RegisterCubit get(context) => BlocProvider.of(context);
 
   LoginModel? loginModel;
 
-  void userLogin({
+  void userRegister({
   required String email,
   required String password,
+  required String name,
+  required String phone,
 })
   {
-    emit(LoginLoadingState());
+    emit(RegisterLoadingState());
 
     DioHelper.postData(
-        url: LOGIN,
+        url: REGISTER,
         data:
         {
-          'email':email,
-          'password':password,
+          'email' : email,
+          'name' : name,
+          'password' : password,
+          'phone' : phone,
         },
     ).then((value) {
       // print(value.data);
-      loginModel = LoginModel.fromJson(value.data!);
-      emit(LoginSuccessState(loginModel!));
+      loginModel = LoginModel.fromJson(value.data);
+      emit(RegisterSuccessState(loginModel!));
     }).catchError((error)
     {
       print(error.toString());
-      emit(LoginErrorState(error.toString()));
+      emit(RegisterErrorState(error.toString()));
     });
 
   }
@@ -49,7 +53,7 @@ class LoginCubit extends Cubit<LoginStates>
         Icons.visibility_outlined :
         Icons.visibility_off_outlined;
 
-    emit(LoginPassVisibilityState());
+    emit(RegisterPassVisibilityState());
   }
 
 

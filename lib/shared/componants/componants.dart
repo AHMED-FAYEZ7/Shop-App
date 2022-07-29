@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shop_app/shared/cubit/cubit.dart';
+import 'package:shop_app/shared/styles/colors.dart';
 
 void navigateTo(context, widget) => Navigator.push(
   context,
@@ -135,3 +137,94 @@ Color choseToastColor(ToastStates state)
 
   return color;
 }
+
+Widget buildListItems(model,context , {bool? isOldPrice = true,}) => Padding(
+  padding: const EdgeInsets.all(20.0),
+  child: Container(
+    height: 120,
+    child: Row(
+      children: [
+        Stack(
+          alignment: AlignmentDirectional.bottomStart,
+          children: [
+            Image(
+              image: NetworkImage(model.image!),
+              height: 120,
+              width:120,
+              fit: BoxFit.contain,
+            ),
+            if(model.discount! != 0 && isOldPrice!)
+              Container(
+                color: Colors.red,
+                padding: const EdgeInsets.symmetric(horizontal: .9,),
+                child: const Text(
+                  'Discount',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(width: 20,),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                model.name!,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  height: 1.3,
+                ),
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Text(
+                    model.price!.toString(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: defaultColor,
+                    ),
+                  ),
+                  const SizedBox(width: 10,),
+                  if(model.discount! != 0 && isOldPrice!)
+                    Text(
+                      model.oldPrice!.toString(),
+                      maxLines: 2,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  const Spacer(),
+                  CircleAvatar(
+                    backgroundColor: AppCubit.get(context).favorites[model.id]! ? defaultColor: Colors.grey,
+                    radius: 14,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: ()
+                      {
+                        AppCubit.get(context).changeFavorites(model.id!);
+                      },
+                      icon: const Icon(
+                        Icons.favorite_border_outlined,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+);

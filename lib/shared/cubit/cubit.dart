@@ -5,13 +5,14 @@ import 'package:shop_app/models/Gategories_model.dart';
 import 'package:shop_app/models/change_favorite_model.dart';
 import 'package:shop_app/models/favorites_model.dart';
 import 'package:shop_app/models/home_model.dart';
+import 'package:shop_app/models/login_model.dart';
 import 'package:shop_app/modules/categories/categories_screen.dart';
 import 'package:shop_app/modules/favorites/favorites_screen.dart';
 import 'package:shop_app/modules/home/home_screen.dart';
 import 'package:shop_app/modules/settings/settings_screen.dart';
-import 'package:shop_app/shared/componants/constants.dart';
 import 'package:shop_app/shared/cubit/states.dart';
 import 'package:shop_app/shared/network/end_points.dart';
+import 'package:shop_app/shared/network/local/cache_helper.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
 
 class AppCubit extends Cubit<AppStates>
@@ -20,6 +21,7 @@ class AppCubit extends Cubit<AppStates>
   static AppCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
+  String? token = CacheHelper.getData(key: 'token');
 
   List<Widget> screens = [
     HomeScreen(),
@@ -45,6 +47,7 @@ class AppCubit extends Cubit<AppStates>
       url: HOME,
       token: token,
     ).then((value) {
+      print(token.toString());
       homeModel = HomeModel.fromJson(value.data);
       // printFullText(homeModel!.data!.banners[0].image);
       // print(homeModel?.status);
@@ -91,7 +94,7 @@ class AppCubit extends Cubit<AppStates>
       token: token,
     ).then((value) {
       changeFavoritesModel = ChangeFavoritesModel.fromJson(value.data);
-      print(value.data);
+      // print(value.data);
 
       if(!changeFavoritesModel!.status!)
       {
@@ -116,12 +119,56 @@ class AppCubit extends Cubit<AppStates>
       url: FAVORITES,
       token: token,
     ).then((value) {
+      // print(token.toString());
       favoritesModel = FavoritesModel.fromJson(value.data);
-      printFullText(favoritesModel!.data!.toString());
+      // printFullText(favoritesModel!.data!.toString());
       emit(AppSuccessGetFavoritesState());
     }).catchError((error){
       print(error.toString());
       emit(AppErrorGetFavoritesState(error.toString()));
+    });
+  }
+
+  LoginModel? profileModel;
+
+  void getProfile()
+  {
+    emit(AppLoadingGetProfileState());
+    DioHelper.getData(
+      url: PROFILE,
+      token: token,
+    ).then((value) {
+      profileModel = LoginModel.fromJson(value.data);
+      // printFullText(profileModel!.data!.name);
+      emit(AppSuccessGetProfileState(profileModel!));
+    }).catchError((error){
+      print(error.toString());
+      emit(AppErrorGetProfileState(error.toString()));
+    });
+  }
+
+  void updateProfile({
+  required String name,
+  required String email,
+  required String phone,
+})
+  {
+    emit(AppLoadingUpdateProfileState());
+    DioHelper.putData(
+      url: UPDATE_PROFILE,
+      token: token,
+      data: {
+        'name':name,
+        'email':email,
+        'phone':phone,
+      },
+    ).then((value) {
+      profileModel = LoginModel.fromJson(value.data);
+      // printFullText(profileModel!.data!.name);
+      emit(AppSuccessUpdateProfileState(profileModel!));
+    }).catchError((error){
+      print(error.toString());
+      emit(AppErrorUpdateProfileState(error.toString()));
     });
   }
 

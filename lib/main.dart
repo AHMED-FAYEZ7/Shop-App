@@ -4,6 +4,7 @@ import 'package:shop_app/layout/shop_layout.dart';
 import 'package:shop_app/modules/login/login_screen.dart';
 import 'package:shop_app/modules/on_boarding/on_boarding_screen.dart';
 import 'package:shop_app/shared/bloc_observer.dart';
+import 'package:shop_app/shared/componants/constants.dart';
 import 'package:shop_app/shared/cubit/cubit.dart';
 import 'package:shop_app/shared/cubit/states.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
@@ -19,8 +20,6 @@ void main()
     await CacheHelper.init();
     Widget? widget;
     bool? onBoarding = CacheHelper.getData(key: 'onBoarding');
-    String? token = CacheHelper.getData(key: 'token');
-    print(token);
     if(onBoarding != null)
     {
       if(token != null)
@@ -43,7 +42,6 @@ void main()
 class MyApp extends StatelessWidget
 {
   final Widget startWidget;
-
   MyApp(this.startWidget);
 
   @override
@@ -55,6 +53,7 @@ class MyApp extends StatelessWidget
         ..getHomeData()
         ..getCategories()
         ..getFavorites()
+        ..getProfile()
       ,
       child: BlocConsumer<AppCubit,AppStates>(
         listener: (context,state){},

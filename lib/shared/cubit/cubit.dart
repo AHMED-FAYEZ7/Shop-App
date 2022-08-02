@@ -10,6 +10,7 @@ import 'package:shop_app/modules/categories/categories_screen.dart';
 import 'package:shop_app/modules/favorites/favorites_screen.dart';
 import 'package:shop_app/modules/home/home_screen.dart';
 import 'package:shop_app/modules/settings/settings_screen.dart';
+import 'package:shop_app/shared/componants/constants.dart';
 import 'package:shop_app/shared/cubit/states.dart';
 import 'package:shop_app/shared/network/end_points.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
@@ -20,8 +21,8 @@ class AppCubit extends Cubit<AppStates>
   AppCubit() : super(AppInitialState());
   static AppCubit get(context) => BlocProvider.of(context);
 
+
   int currentIndex = 0;
-  String? token = CacheHelper.getData(key: 'token');
 
   List<Widget> screens = [
     HomeScreen(),

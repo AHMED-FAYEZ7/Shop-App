@@ -8,6 +8,8 @@ import 'package:shop_app/shared/componants/componants.dart';
 import 'package:shop_app/shared/componants/constants.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
 
+import '../../shared/cubit/cubit.dart';
+
 class RegisterScreen extends StatelessWidget {
 
   var nameController = TextEditingController();
@@ -33,6 +35,8 @@ class RegisterScreen extends StatelessWidget {
               ).then((value) {
                 token = state.loginModel.data!.token;
                 navigateAndFinish(context, const ShopLayout());
+                AppCubit.get(context)..getProfile()..getFavorites()..getHomeData()..getCategories();
+                AppCubit.get(context).currentIndex = 0;
               });
             }else
             {
